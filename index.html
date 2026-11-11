@@ -102,20 +102,20 @@
 const CHANNELS = [
   // ---- Generalistas
   {id:"rtp1", name:"RTP1", group:"Generalistas", color:"#0a55c4", tag:"RTP1",
-   stream:"https://streaming-live.rtp.pt/liverepeater/rtp1HD.smil/playlist.m3u8", site:"https://www.rtp.pt/play/direto"},
+   stream:"https://streaming-live.rtp.pt/liverepeater/smil:rtp1HD.smil/playlist.m3u8", safariOnly:true, site:"https://www.rtp.pt/play/direto"},
   {id:"rtp2", name:"RTP2", group:"Generalistas", color:"#2a2f8f", tag:"RTP2",
-   stream:"https://streaming-live.rtp.pt/liverepeater/rtp2HD.smil/playlist.m3u8", site:"https://www.rtp.pt/play/direto"},
+   stream:"https://streaming-live.rtp.pt/liverepeater/smil:rtp2HD.smil/playlist.m3u8", safariOnly:true, site:"https://www.rtp.pt/play/direto"},
   {id:"sic", name:"SIC", group:"Generalistas", color:"#e0191f", tag:"SIC",
-   stream:"https://sic.live.impresa.pt/sic.m3u8", site:"https://opto.sic.pt"},
+   stream:"https://sic.live.impresa.pt/sic.m3u8", safariOnly:true, site:"https://opto.sic.pt"},
   {id:"tvi", name:"TVI", group:"Generalistas", color:"#111", tag:"TVI",
    stream:"", site:"https://tviplayer.iol.pt/direto/TVI",
    note:"A TVI só emite em direto dentro do TVI Player (é grátis, mas tem de ser aberto lá)."},
   {id:"rtpmem", name:"RTP Memória", group:"Generalistas", color:"#7b5a2e", tag:"MEM",
-   stream:"https://streaming-live.rtp.pt/liverepeater/smil:rtpmem.smil/playlist.m3u8", site:"https://www.rtp.pt/play/direto"},
+   stream:"https://streaming-live.rtp.pt/liverepeater/smil:rtpmem.smil/playlist.m3u8", safariOnly:true, site:"https://www.rtp.pt/play/direto"},
 
   // ---- Informação
   {id:"rtpn", name:"RTP Notícias", group:"Informação", color:"#c8102e", tag:"RTPN",
-   stream:"https://streaming-live.rtp.pt/livetvhlsDVR/rtpnHDdvr.smil/playlist.m3u8", site:"https://www.rtp.pt/play/direto"},
+   stream:"https://streaming-live.rtp.pt/livetvhlsDVR/rtpnHDdvr.smil/playlist.m3u8", safariOnly:true, site:"https://www.rtp.pt/play/direto"},
   {id:"cnn", name:"CNN Portugal", group:"Informação", color:"#cc0000", tag:"CNN",
    stream:"", site:"https://cnnportugal.iol.pt/direto",
    note:"A CNN Portugal emite em direto grátis e sem registo no próprio site."},
@@ -129,13 +129,13 @@ const CHANNELS = [
   {id:"porto", name:"Porto Canal", group:"Regionais e internacionais", color:"#0057a8", tag:"PC",
    stream:"https://pull-live-156-1.global.ssl.fastly.net/pc5865dc25400thmb-ea6bf03b14fa318f7133/smil:pc1-jhrgyuoqe5865db-68tkgb14fa318f7133f03.smil/playlist.m3u8", site:"https://portocanal.sapo.pt"},
   {id:"rtpacores", name:"RTP Açores", group:"Regionais e internacionais", color:"#1d7fb3", tag:"AÇO",
-   stream:"https://streaming-live.rtp.pt/liverepeater/smil:rtpacoresHD.smil/playlist.m3u8", site:"https://www.rtp.pt/play/direto"},
+   stream:"https://streaming-live.rtp.pt/liverepeater/smil:rtpacoresHD.smil/playlist.m3u8", safariOnly:true, site:"https://www.rtp.pt/play/direto"},
   {id:"rtpmadeira", name:"RTP Madeira", group:"Regionais e internacionais", color:"#1c8a5a", tag:"MAD",
-   stream:"https://streaming-live.rtp.pt/liverepeater/smil:rtpmadeira.smil/playlist.m3u8", site:"https://www.rtp.pt/play/direto"},
+   stream:"https://streaming-live.rtp.pt/liverepeater/smil:rtpmadeira.smil/playlist.m3u8", safariOnly:true, site:"https://www.rtp.pt/play/direto"},
   {id:"rtpafrica", name:"RTP África", group:"Regionais e internacionais", color:"#d98a00", tag:"ÁFR",
-   stream:"https://streaming-live.rtp.pt/liverepeater/smil:rtpafrica.smil/playlist.m3u8", site:"https://www.rtp.pt/play/direto"},
+   stream:"https://streaming-live.rtp.pt/liverepeater/smil:rtpafrica.smil/playlist.m3u8", safariOnly:true, site:"https://www.rtp.pt/play/direto"},
   {id:"rtpi", name:"RTP Internacional", group:"Regionais e internacionais", color:"#4a3aa8", tag:"RTPi",
-   stream:"https://streaming-live.rtp.pt/liverepeater/smil:rtpi.smil/playlist.m3u8", site:"https://www.rtp.pt/play/direto"},
+   stream:"https://streaming-live.rtp.pt/liverepeater/smil:rtpi.smil/playlist.m3u8", safariOnly:true, site:"https://www.rtp.pt/play/direto"},
   {id:"kuriakos", name:"Kuriakos TV", group:"Regionais e internacionais", color:"#6b2fa0", tag:"KTV",
    stream:"https://w1.manasat.com/ktv/smil:ktv.smil/playlist.m3u8", site:"https://kuriakostv.com"},
 ];
@@ -216,21 +216,21 @@ function play(c){
   };
   video.onplaying = onPlaying;
 
-  if (window.Hls && Hls.isSupported()){
+  if (video.canPlayType("application/vnd.apple.mpegurl")){
+    // Safari (e outros com HLS nativo): toca direto e funciona com a RTP e a SIC
+    video.src = c.stream;
+    video.onerror = () => fallback(c);
+    video.play().catch(()=>{ video.muted = true; syncMute(); video.play().catch(()=>{}); });
+  } else if (window.Hls && Hls.isSupported()){
     hls = new Hls({ lowLatencyMode:false, backBufferLength:30 });
     hls.on(Hls.Events.ERROR, (e, d) => {
       if (!d.fatal) return;
       if (d.type === Hls.ErrorTypes.MEDIA_ERROR){ hls.recoverMediaError(); return; }
-      fallback(c);
+      fallback(c, c.safariOnly ? "Este canal só deixa ver fora do site oficial no Safari. Abre a Minha TV no Safari ou vê no site oficial." : null);
     });
     hls.loadSource(c.stream);
     hls.attachMedia(video);
     hls.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(()=>{ video.muted = true; syncMute(); video.play().catch(()=>{}); }));
-  } else if (video.canPlayType("application/vnd.apple.mpegurl")){
-    // Safari toca HLS nativamente
-    video.src = c.stream;
-    video.onerror = () => fallback(c);
-    video.play().catch(()=>{ video.muted = true; syncMute(); video.play().catch(()=>{}); });
   } else {
     fallback(c, "Este navegador não consegue tocar o canal. Experimenta o Chrome ou o Safari.");
   }
