@@ -143,6 +143,7 @@ const CHANNELS = [
 const $ = s => document.querySelector(s);
 const video = $("#video"), list = $("#list");
 let hls = null, current = null, loadTimer = null;
+const isSafari = /^((?!chrome|chromium|android|crios|edg).)*safari/i.test(navigator.userAgent);
 
 const store = {
   get(k){ try{ return localStorage.getItem(k) }catch(e){ return null } },
@@ -163,7 +164,7 @@ function render(filter=""){
     b.className = "ch" + (current && current.id===c.id ? " active":"");
     b.dataset.id = c.id;
     b.innerHTML = `<span class="tile" style="background:${c.color}">${c.tag}</span>
-      <span class="meta"><span class="name">${c.name}</span><br><span class="sub">${c.stream ? "Ver aqui" : "Abre no site oficial ↗"}</span></span>
+      <span class="meta"><span class="name">${c.name}</span><br><span class="sub">${!c.stream ? "Abre no site oficial ↗" : (c.safariOnly && !isSafari ? "Só no Safari · senão abre o site" : "Ver aqui")}</span></span>
       <span class="num">${i+1}</span>`;
     b.onclick = () => play(c);
     list.appendChild(b); n++;
@@ -216,11 +217,13 @@ function play(c){
   };
   video.onplaying = onPlaying;
 
-  if (video.canPlayType("application/vnd.apple.mpegurl")){
-    // Safari (e outros com HLS nativo): toca direto e funciona com a RTP e a SIC
+  if (isSafari && video.canPlayType("application/vnd.apple.mpegurl")){
+    // Safari: toca direto (é o único navegador onde a RTP e a SIC abrem fora do site deles)
     video.src = c.stream;
     video.onerror = () => fallback(c);
     video.play().catch(()=>{ video.muted = true; syncMute(); video.play().catch(()=>{}); });
+  } else if (c.safariOnly){
+    fallback(c, "A "+c.name.split(" ")[0]+" só deixa ver fora do site oficial no Safari. Abre a Minha TV no Safari ou vê no site oficial.");
   } else if (window.Hls && Hls.isSupported()){
     hls = new Hls({ lowLatencyMode:false, backBufferLength:30 });
     hls.on(Hls.Events.ERROR, (e, d) => {
