@@ -69,6 +69,7 @@
 <main>
   <div class="stage">
     <video id="video" playsinline></video>
+    <iframe id="yt" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen style="display:none;position:absolute;inset:0;width:100%;height:100%;border:0"></iframe>
     <div class="overlay" id="loading"><div class="spinner"></div><p id="loadingTxt">A carregar…</p></div>
     <div class="overlay" id="external">
       <h2 id="extTitle"></h2>
@@ -120,8 +121,7 @@ const CHANNELS = [
    stream:"", site:"https://cnnportugal.iol.pt/direto",
    note:"A CNN Portugal emite em direto grátis e sem registo no próprio site. Abriu numa janela nova."},
   {id:"euronews", name:"Euronews PT", group:"Informação", color:"#1b3a6b", tag:"EN",
-   stream:"", site:"https://pt.euronews.com/live",
-   note:"A Euronews em português emite em direto no próprio site. Abriu numa janela nova."},
+   stream:"", yt:"UCUmEPYxmnyQDeRUcFkslmQw", site:"https://pt.euronews.com/live"},
   {id:"artv", name:"ARTV Parlamento", group:"Informação", color:"#2f6b4f", tag:"AR",
    stream:"https://playout172.livextend.cloud/liveiframe/_definst_/liveartvabr/playlist.m3u8", site:"https://canal.parlamento.pt"},
 
@@ -164,7 +164,7 @@ function render(filter=""){
     b.className = "ch" + (current && current.id===c.id ? " active":"");
     b.dataset.id = c.id;
     b.innerHTML = `<span class="tile" style="background:${c.color}">${c.tag}</span>
-      <span class="meta"><span class="name">${c.name}</span><br><span class="sub">${c.stream ? "Ver aqui" : "Abre no site oficial ↗"}</span></span>
+      <span class="meta"><span class="name">${c.name}</span><br><span class="sub">${(c.stream||c.yt) ? "Ver aqui" : "Abre no site oficial ↗"}</span></span>
       <span class="num">${i+1}</span>`;
     b.onclick = () => play(c, true);
     list.appendChild(b); n++;
@@ -180,6 +180,7 @@ function stop(){
   clearTimeout(loadTimer);
   if (hls){ hls.destroy(); hls = null; }
   video.removeAttribute("src"); video.load();
+  const yt=$("#yt"); yt.style.display="none"; yt.removeAttribute("src");
 }
 
 function fallback(c, reason){
@@ -203,6 +204,10 @@ function play(c, fromClick){
   document.title = c.name + " · Minha TV";
 
   stop();
+  if (c.yt){
+    const yt=$("#yt"); yt.src="https://www.youtube-nocookie.com/embed/live_stream?channel="+c.yt+"&autoplay=1&mute=0";
+    yt.style.display="block"; show(null); $("#liveTag").style.visibility="visible"; return;
+  }
   if (!c.stream){ if (fromClick) window.open(c.site, "_blank", "noopener"); fallback(c); return; }
 
   show("#loading");
@@ -276,7 +281,7 @@ document.addEventListener("keydown", e => {
 const v = parseFloat(store.get("vol")); if (!isNaN(v)){ video.volume = v; $("#vol").value = v; }
 render();
 const last = CHANNELS.find(c => c.id === store.get("lastChannel"));
-if (last && last.stream) play(last);
+if (last && (last.stream||last.yt)) play(last);
 </script>
 </body>
 </html>
