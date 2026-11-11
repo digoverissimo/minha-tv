@@ -102,26 +102,26 @@
 const CHANNELS = [
   // ---- Generalistas
   {id:"rtp1", name:"RTP1", group:"Generalistas", color:"#0a55c4", tag:"RTP1",
-   stream:"https://streaming-live.rtp.pt/liverepeater/smil:rtp1HD.smil/playlist.m3u8", safariOnly:true, site:"https://www.rtp.pt/play/direto"},
+   stream:"", site:"https://www.rtp.pt/play/direto/rtp1", note:"A RTP só deixa ver os canais dela no site RTP Play (é grátis). Abriu numa janela nova."},
   {id:"rtp2", name:"RTP2", group:"Generalistas", color:"#2a2f8f", tag:"RTP2",
-   stream:"https://streaming-live.rtp.pt/liverepeater/smil:rtp2HD.smil/playlist.m3u8", safariOnly:true, site:"https://www.rtp.pt/play/direto"},
+   stream:"", site:"https://www.rtp.pt/play/direto/rtp2", note:"A RTP só deixa ver os canais dela no site RTP Play (é grátis). Abriu numa janela nova."},
   {id:"sic", name:"SIC", group:"Generalistas", color:"#e0191f", tag:"SIC",
-   stream:"https://sic.live.impresa.pt/sic.m3u8", safariOnly:true, site:"https://opto.sic.pt"},
+   stream:"", site:"https://opto.sic.pt", note:"A SIC só deixa ver o direto no site/app OPTO. Abriu numa janela nova."},
   {id:"tvi", name:"TVI", group:"Generalistas", color:"#111", tag:"TVI",
    stream:"", site:"https://tviplayer.iol.pt/direto/TVI",
-   note:"A TVI só emite em direto dentro do TVI Player (é grátis, mas tem de ser aberto lá)."},
+   note:"A TVI só emite em direto dentro do TVI Player (é grátis). Abriu numa janela nova."},
   {id:"rtpmem", name:"RTP Memória", group:"Generalistas", color:"#7b5a2e", tag:"MEM",
-   stream:"https://streaming-live.rtp.pt/liverepeater/smil:rtpmem.smil/playlist.m3u8", safariOnly:true, site:"https://www.rtp.pt/play/direto"},
+   stream:"", site:"https://www.rtp.pt/play/direto/rtpmemoria", note:"A RTP só deixa ver os canais dela no site RTP Play (é grátis). Abriu numa janela nova."},
 
   // ---- Informação
   {id:"rtpn", name:"RTP Notícias", group:"Informação", color:"#c8102e", tag:"RTPN",
-   stream:"https://streaming-live.rtp.pt/livetvhlsDVR/rtpnHDdvr.smil/playlist.m3u8", safariOnly:true, site:"https://www.rtp.pt/play/direto"},
+   stream:"", site:"https://www.rtp.pt/play/direto/rtp3", note:"A RTP só deixa ver os canais dela no site RTP Play (é grátis). Abriu numa janela nova."},
   {id:"cnn", name:"CNN Portugal", group:"Informação", color:"#cc0000", tag:"CNN",
    stream:"", site:"https://cnnportugal.iol.pt/direto",
-   note:"A CNN Portugal emite em direto grátis e sem registo no próprio site."},
+   note:"A CNN Portugal emite em direto grátis e sem registo no próprio site. Abriu numa janela nova."},
   {id:"euronews", name:"Euronews PT", group:"Informação", color:"#1b3a6b", tag:"EN",
    stream:"", site:"https://pt.euronews.com/live",
-   note:"A Euronews em português emite em direto no próprio site."},
+   note:"A Euronews em português emite em direto no próprio site. Abriu numa janela nova."},
   {id:"artv", name:"ARTV Parlamento", group:"Informação", color:"#2f6b4f", tag:"AR",
    stream:"https://playout172.livextend.cloud/liveiframe/_definst_/liveartvabr/playlist.m3u8", site:"https://canal.parlamento.pt"},
 
@@ -129,13 +129,13 @@ const CHANNELS = [
   {id:"porto", name:"Porto Canal", group:"Regionais e internacionais", color:"#0057a8", tag:"PC",
    stream:"https://pull-live-156-1.global.ssl.fastly.net/pc5865dc25400thmb-ea6bf03b14fa318f7133/smil:pc1-jhrgyuoqe5865db-68tkgb14fa318f7133f03.smil/playlist.m3u8", site:"https://portocanal.sapo.pt"},
   {id:"rtpacores", name:"RTP Açores", group:"Regionais e internacionais", color:"#1d7fb3", tag:"AÇO",
-   stream:"https://streaming-live.rtp.pt/liverepeater/smil:rtpacoresHD.smil/playlist.m3u8", safariOnly:true, site:"https://www.rtp.pt/play/direto"},
+   stream:"", site:"https://www.rtp.pt/play/direto/rtpacores", note:"A RTP só deixa ver os canais dela no site RTP Play (é grátis). Abriu numa janela nova."},
   {id:"rtpmadeira", name:"RTP Madeira", group:"Regionais e internacionais", color:"#1c8a5a", tag:"MAD",
-   stream:"https://streaming-live.rtp.pt/liverepeater/smil:rtpmadeira.smil/playlist.m3u8", safariOnly:true, site:"https://www.rtp.pt/play/direto"},
+   stream:"", site:"https://www.rtp.pt/play/direto/rtpmadeira", note:"A RTP só deixa ver os canais dela no site RTP Play (é grátis). Abriu numa janela nova."},
   {id:"rtpafrica", name:"RTP África", group:"Regionais e internacionais", color:"#d98a00", tag:"ÁFR",
-   stream:"https://streaming-live.rtp.pt/liverepeater/smil:rtpafrica.smil/playlist.m3u8", safariOnly:true, site:"https://www.rtp.pt/play/direto"},
+   stream:"", site:"https://www.rtp.pt/play/direto/rtpafrica", note:"A RTP só deixa ver os canais dela no site RTP Play (é grátis). Abriu numa janela nova."},
   {id:"rtpi", name:"RTP Internacional", group:"Regionais e internacionais", color:"#4a3aa8", tag:"RTPi",
-   stream:"https://streaming-live.rtp.pt/liverepeater/smil:rtpi.smil/playlist.m3u8", safariOnly:true, site:"https://www.rtp.pt/play/direto"},
+   stream:"", site:"https://www.rtp.pt/play/direto/rtpinternacional", note:"A RTP só deixa ver os canais dela no site RTP Play (é grátis). Abriu numa janela nova."},
   {id:"kuriakos", name:"Kuriakos TV", group:"Regionais e internacionais", color:"#6b2fa0", tag:"KTV",
    stream:"https://w1.manasat.com/ktv/smil:ktv.smil/playlist.m3u8", site:"https://kuriakostv.com"},
 ];
@@ -164,9 +164,9 @@ function render(filter=""){
     b.className = "ch" + (current && current.id===c.id ? " active":"");
     b.dataset.id = c.id;
     b.innerHTML = `<span class="tile" style="background:${c.color}">${c.tag}</span>
-      <span class="meta"><span class="name">${c.name}</span><br><span class="sub">${!c.stream ? "Abre no site oficial ↗" : (c.safariOnly && !isSafari ? "Só no Safari · senão abre o site" : "Ver aqui")}</span></span>
+      <span class="meta"><span class="name">${c.name}</span><br><span class="sub">${c.stream ? "Ver aqui" : "Abre no site oficial ↗"}</span></span>
       <span class="num">${i+1}</span>`;
-    b.onclick = () => play(c);
+    b.onclick = () => play(c, true);
     list.appendChild(b); n++;
   });
   if (!n) list.innerHTML = `<div class="group">Nenhum canal encontrado</div>`;
@@ -193,7 +193,7 @@ function fallback(c, reason){
   show("#external");
 }
 
-function play(c){
+function play(c, fromClick){
   current = c;
   store.set("lastChannel", c.id);
   $("#nowName").textContent = c.name;
@@ -203,7 +203,7 @@ function play(c){
   document.title = c.name + " · Minha TV";
 
   stop();
-  if (!c.stream){ fallback(c); return; }
+  if (!c.stream){ if (fromClick) window.open(c.site, "_blank", "noopener"); fallback(c); return; }
 
   show("#loading");
   $("#loadingTxt").textContent = "A ligar a " + c.name + "…";
